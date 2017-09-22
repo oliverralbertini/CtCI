@@ -57,15 +57,6 @@ void clearElement(struct Matrix *m, int r, int c)
    m->m[r][c] = 0;
 }
 
-void clearColRow(struct Matrix *m, int r, int c)
-{
-   int *i, cols = m->col, rows = m->row, **j;
-   for (i = m->m[r]; i < m->m[r] + cols; i++)
-      *i = 0;
-   for (j = &m->m[0]; j < &m->m[rows]; j++)
-      (*j)[c] = 0;
-}
-
 void findZeros(struct Matrix *m, struct zeroElements *zeros)
 {
    int i, j;
