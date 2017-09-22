@@ -20,14 +20,12 @@ struct pixel
 // rotate pixels 90 degrees clockwise
 void rotatePixel(struct pixel *p)
 {
-   uint8_t tmp0, tmp1, tmp3;
-   tmp0 = p->p0;
+   uint8_t tmp;
+   tmp = p->p0;
    p->p0 = p->p2;
-   tmp1 = p->p1;
-   p->p1 = tmp0;
-   tmp3 = p->p3;
-   p->p3 = tmp1;
-   p->p2 = tmp3;
+   p->p2 = p->p3;
+   p->p3 = p->p1;
+   p->p1 = tmp;
 }
 
 // rotate the whole matrix
@@ -35,7 +33,7 @@ void rotateMatrix(struct pixel (*M)[N])
 {
    int i, j; //, N = sizeof(M) / sizeof(M[0][0]);
    // printf("This is N*N: %d\n", N);
-   struct pixel tmp0, tmp1, tmp3;
+   struct pixel tmp;
 
    for (i = 0; i < N / 2; i++)
       for (j = i; j < N - i - 1; j++) {
@@ -44,13 +42,11 @@ void rotateMatrix(struct pixel (*M)[N])
          rotatePixel(&M[j][N - i - 1]);
          rotatePixel(&M[N - i - 1][N - j - 1]);
          rotatePixel(&M[N - j - 1][i]);
-         tmp0 = M[i][j];
+         tmp = M[i][j];
          M[i][j] = M[N - j - 1][i];
-         tmp1 = M[j][N - i - 1];
-         M[j][N - i - 1] = tmp0;
-         tmp3 = M[N - i - 1][N - j - 1];
-         M[N - i - 1][N - j - 1] = tmp1;
-         M[N - j - 1][i] = tmp3;
+         M[N - j - 1][i] = M[N - i - 1][N - j - 1];
+         M[N - i - 1][N - j - 1] = M[j][N - i - 1];
+         M[j][N - i - 1] = tmp;
       }
 }
 
