@@ -5,11 +5,12 @@
 
 #include<stdio.h>
 #include<stdlib.h>
+#include<stdbool.h>
 
 struct zeroElements
 {
-   int *zeroRows;
-   int *zeroCols;
+   bool *zeroRows;
+   bool *zeroCols;
 };
 
 struct Matrix
@@ -61,14 +62,14 @@ void findZeros(struct Matrix *m, struct zeroElements *zeros)
 {
    int i, j;
    for (i = 0; i < m->row; i++)
-      zeros->zeroRows[i] = 0;
+      zeros->zeroRows[i] = false;
    for (j = 0; j < m->col; j++)
-      zeros->zeroCols[j] = 0;
+      zeros->zeroCols[j] = false;
    for (i = 0; i < m->row; i++)
       for (j = 0; j < m->col; j++)
          if (m->m[i][j] == 0) {
-            zeros->zeroRows[i]++;
-            zeros->zeroCols[j]++;
+            zeros->zeroRows[i] = true;
+            zeros->zeroCols[j] = true;
          }
 }
 

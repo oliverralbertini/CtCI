@@ -16,6 +16,8 @@ run_RotateMatrix: RotateMatrix
 	./RotateMatrix
 run_StringCompression: StringCompression
 	./StringCompression "aabbccdd" "aaabbccdd" "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAbbcc"
+run_StringRotation: StringRotation
+	./StringRotation
 run_URLify: URLify
 	./URLify "this has some spaces      "
 run_ZeroMatrix: ZeroMatrix
