@@ -28,25 +28,33 @@ void rotatePixel(struct pixel *p)
    p->p1 = tmp;
 }
 
+struct index
+{
+   int i;
+   int j;
+};
+
 // rotate the whole matrix
 void rotateMatrix(struct pixel (*M)[N])
 {
-   int i, j; //, N = sizeof(M) / sizeof(M[0][0]);
-   // printf("This is N*N: %d\n", N);
+   int i, j;
    struct pixel tmp;
 
    for (i = 0; i < N / 2; i++)
       for (j = i; j < N - i - 1; j++) {
-         // in clockwise order
-         rotatePixel(&M[i][j]);
-         rotatePixel(&M[j][N - i - 1]);
-         rotatePixel(&M[N - i - 1][N - j - 1]);
-         rotatePixel(&M[N - j - 1][i]);
-         tmp = M[i][j];
-         M[i][j] = M[N - j - 1][i];
-         M[N - j - 1][i] = M[N - i - 1][N - j - 1];
-         M[N - i - 1][N - j - 1] = M[j][N - i - 1];
-         M[j][N - i - 1] = tmp;
+         struct index t = {         i,         j };
+         struct index l = { N - j - 1,         i };
+         struct index b = { N - i - 1, N - j - 1 };
+         struct index r = {         j, N - i - 1 };
+         rotatePixel(&M[t.i][t.j]);
+         rotatePixel(&M[l.i][l.j]);
+         rotatePixel(&M[b.i][b.j]);
+         rotatePixel(&M[r.i][r.j]);
+         tmp = M[t.i][t.j];
+         M[t.i][t.j] = M[l.i][l.j];
+         M[l.i][l.j] = M[b.i][b.j];
+         M[b.i][b.j] = M[r.i][r.j];
+         M[r.i][r.j] = tmp;
       }
 }
 
@@ -90,7 +98,6 @@ int main(void)
                             // {{12,13,14,15}, {16,17,18,19}, {20,21,22,23}},
                             // {{24,25,26,27}, {28,29,30,31}, {32,33,34,35}} };
    printMatrix(M);
-   printf("\n");
    rotateMatrix(M);
    printMatrix(M);
 
