@@ -13,18 +13,18 @@
  */
 
 #include<stdio.h>
-#include<math.h>
 #include<limits.h>
+#include<stdint.h>
 #define BITS 8
 
-void swap(__uint8_t *a, int i, int j)
+void swap(uint8_t *a, int i, int j)
 {
    int hld = a[i];
    a[i] = a[j];
    a[j] = hld;
 }
 
-void radix_sort(__uint8_t *a, int bit, int start, int end)
+void radix_sort(uint8_t *a, int bit, int start, int end)
 {
    if (bit < 0) return;
    int s = start, e = end;
@@ -41,7 +41,7 @@ void radix_sort(__uint8_t *a, int bit, int start, int end)
 int main(int argc, char *argv[])
 {
    int i, N = argc - 1;
-   __uint8_t a[N];
+   uint8_t a[N];
    for (i = 1; i <= N; i++)
       sscanf(argv[i], "%d", &a[i - 1]);
 
@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
    if (N % 2 == 1)
       printf("%d", a[N / 2]);
    else
-      printf("%f", (a[N / 2 - 1] + a[N / 2]) / 2.0);
+      printf("%.1f", (a[N / 2 - 1] + a[N / 2]) / 2.0);
 
    return 0;
 }
