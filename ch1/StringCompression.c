@@ -14,9 +14,10 @@
 struct myString
 {
    size_t len;
-   char * str;
+   char *str;
 };
 
+// dynamically resize the string
 struct myString * resize(struct myString *myStrPtr, int factor)
 {
    // printf("Updating length to size %d.\n", myStrPtr->len * factor);
@@ -31,7 +32,9 @@ struct myString * resize(struct myString *myStrPtr, int factor)
    return myStrPtr;
 }
 
-void insertNumber(struct myString * myStrPtr, char c, int count, int *i)
+// convert integer to string and add to end of compressed string
+// along with the character we just counted
+void appendNumber(struct myString *myStrPtr, char c, int count, int *i)
 {
    int count_save = count, length = 1, j;
    while (count_save = count_save / 10)
@@ -47,7 +50,8 @@ void insertNumber(struct myString * myStrPtr, char c, int count, int *i)
    myStrPtr->str[*i] = '\0';
 }
 
-char * compress(char * str, struct myString *myStrPtr)
+// perform the compression step
+char * compress(char *str, struct myString *myStrPtr)
 {
    int strl = strlen(str), i = 0, charCount = 1;
    char *p;
@@ -57,7 +61,7 @@ char * compress(char * str, struct myString *myStrPtr)
       if (*p == *(p - 1))
          charCount++;
       else {
-         insertNumber(myStrPtr, *(p - 1), charCount, &i);
+         appendNumber(myStrPtr, *(p - 1), charCount, &i);
          charCount = 1;
       }
       if (i >= strl)
