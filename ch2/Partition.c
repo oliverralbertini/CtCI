@@ -83,6 +83,42 @@ node_t *partition(node_t *list, int part)
    return list;
 }
 
+/* solution from book, basically */
+node_t *partitionTwoList(node_t *list, int part)
+{
+   node_t *startSmall = NULL, *endSmall = NULL,
+          *startBig   = NULL, *endBig   = NULL, *next;
+
+   if (list == NULL) return NULL;
+   while (list != NULL) {
+      next = list->next;
+      list->next = NULL;
+      if (list->val < part)
+         if (startSmall == NULL) {
+            startSmall = list;
+            endSmall = startSmall;
+         }
+         else {
+            endSmall->next = list;
+            endSmall = list;
+         }
+      else
+         if (startBig == NULL) {
+            startBig = list;
+            endBig = startBig;
+         }
+         else {
+            endBig->next = list;
+            endBig = list;
+         }
+      list = next;
+   }
+   if (startSmall == NULL)
+      return startBig;
+   endSmall->next = startBig;
+   return startSmall;
+}
+
 void printList(node_t *list)
 {
    while (list != NULL) {
@@ -94,15 +130,21 @@ void printList(node_t *list)
 
 int main(int argc, char *argv[])
 {
-   node_t *first;
-   int N = 32, part = N / 2;
+   node_t *list1 = NULL, *list2 = NULL;
+   int N = 32, part = N / 2, random;
 
    srand(time(NULL));
-   for (int i = 0; i < N; i++)
-      first = insert(first, rand() % N);
-   printList(first);
+   for (int i = 0; i < N; i++) {
+      random = rand() %N;
+      list1 = insert(list1, random);
+      list2 = insert(list2, random);
+   }
+   printList(list1);
+   printList(list2);
    printf("Partition: %d\n", part);
-   first = partition(first, part);
-   printList(first);
+   list1 = partitionTwoList(list1, part);
+   list2 = partition(list2, part);
+   printList(list1);
+   printList(list2);
    return 0;
 }
