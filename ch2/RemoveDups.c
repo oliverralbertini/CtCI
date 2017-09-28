@@ -67,7 +67,7 @@ node_t * removeDups(node_t *list)
    return list;
 }
 
-/* have to visit each node roughly once */
+/* have to visit each node roughly N times */
 node_t *removeDupsSlow(node_t *list)
 {
    node_t *front, *back, *hold = NULL, *prev = NULL;
