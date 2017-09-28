@@ -1,4 +1,4 @@
-SRCS=ReturnKthtoLast.c
+SRCS=ReturnKthtoLast.c DeleteMiddleNode.c
 most: $(SRCS:.c=)
 LIB=lib
 
