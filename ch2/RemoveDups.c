@@ -49,10 +49,11 @@ node_t * removeDups(node_t *list)
    curr = list;
    while (curr != NULL)
       if (ht_get(ht, curr->val) == 1) {
-         if (prev != NULL)
-            prev->next = curr->next;
-         else
-            list = curr->next;
+         /* prev should not be NULL here
+          * or else curr->val should not be in
+          * an empty hash table
+          */
+         prev->next = curr->next;
          hold = curr->next;
          free(curr);
          curr = hold;
@@ -90,7 +91,7 @@ node_t *removeDupsSlow(node_t *list)
 
 int main(int argc, char *argv[])
 {
-   int i, N = 1000;
+   int i, N = 10000000, size = 0;
    node_t *first = NULL, *p;
    srand(time(NULL));
    for (i = 0; i < N; ++i)
@@ -98,8 +99,12 @@ int main(int argc, char *argv[])
    // for (p = first; p != NULL; p = p->next)
       // printf("%2d ", p->val);
    // printf("\n");
-   first = removeDupsSlow(first);
-   // first = removeDups(first);
+   // first = removeDupsSlow(first);
+   first = removeDups(first);
+   for (p = first; p != NULL; p = p->next)
+      size++;
+   printf("Old size: %d, new size: %d\n", N, size);
+
    // for (p = first; p != NULL; p = p->next)
       // printf("%2d ", p->val);
    return 0;
