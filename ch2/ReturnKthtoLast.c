@@ -53,6 +53,20 @@ int findKthToLast(node_t *list, int k)
    return answer;
 }
 
+int findKthRunnerMethod(node_t *list, int k)
+{
+   node_t *runner = list;
+   for (int count = 0; count < k && runner != NULL; count++)
+      runner = runner->next;
+   if (runner == NULL || runner == list)
+      return list->val;
+   while (runner != NULL) {
+      runner = runner->next;
+      list = list->next;
+   }
+   return list->val;
+}
+
 int main(int argc, char *argv[])
 {
    int N = 20;
@@ -64,6 +78,9 @@ int main(int argc, char *argv[])
    printf("\n");
    for (int i = N; i > 0; i--)
       printf("%d ", findKthToLast(first, i));
+   printf("\n");
+   for (int i = N; i > 0; i--)
+      printf("%d ", findKthRunnerMethod(first, i));
 
    return 0;
 }
