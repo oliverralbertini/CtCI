@@ -1,5 +1,5 @@
-SRCS=$(wildcard *.c)
-# all: $(SRCS:.c=)
+SRCS=ReturnKthtoLast.c
+most: $(SRCS:.c=)
 LIB=lib
 
 RemoveDups: RemoveDups.o libHashTable.a
