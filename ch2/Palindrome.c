@@ -36,17 +36,21 @@ node_t *insert(node_t *list, int val)
 /* takes memory to hold backwards copy */
 bool isPalindrome(node_t *list)
 {
-   node_t *p = list, *bw = NULL, *hold;
+   node_t *fast = list, *bw = NULL, *hold;
    int count = 0;
 
    if (list == NULL) return false; // empty list
-   if (list->next == NULL) return true; // one item, it's a palidrome.
-   while (p != NULL) {
-      bw = insert(bw, p->val);
-      p = p->next;
+   if (list->next == NULL) return true; // one item, it's a trivial palindrome
+   /* move fast twice as fast as slow. when fast reaches the end,
+    * slow will be at the middle */
+   while (fast != NULL && fast->next != NULL) {
+      bw = insert(bw, list->val);
+      list = list->next;
+      fast = fast->next->next;
       count++;
    }
-   count /= 2;
+   // odd case
+   if (fast != NULL) list = list->next;
    while (count > 0) {
       if (list->val != bw->val) return false;
       hold = bw->next;
@@ -62,35 +66,44 @@ bool isPalindrome(node_t *list)
 int listCount(node_t *list)
 {
    int count = 0;
-   while (list != NULL) { list = list->next; count++; }
-   return count;
+
+   while (list != NULL && list->next != NULL) {
+      list = list->next->next;
+      count++;
+   }
+   /* even case */
+   if (list == NULL)
+      return count * 2;
+   /* odd case */
+   return count * 2 + 1;
 }
 
-node_t *isPalindromeRecursiveHelper(node_t *list, node_t *mid, int stop, int i)
+/* instead of class with bool/node, return NULL if not palindrome
+ * otherwise return a valid node */
+node_t *isPalindromeRecursiveHelper(node_t *list, int length)
 {
-   if (stop == i) {
-      if (list->val == mid->val)
-         if (mid->next != NULL) return mid->next;
-         else                   return list;
+   node_t *compare;
+
+   if (length <= 1) {
+      compare = list->next;
+      if (length == 1) compare = compare->next;
+      if (list->val == compare->val)
+         if (compare->next != NULL) return compare->next;
+         else                       return compare;
       return NULL;
    }
-   mid = isPalindromeRecursiveHelper(list->next, mid, stop, ++i);
-   if (mid == NULL || list->val != mid->val) return NULL;
-   else if (mid->next != NULL)               return mid->next;
+   compare = isPalindromeRecursiveHelper(list->next, length - 2);
+   if (compare == NULL || list->val != compare->val) return NULL;
+   else if (compare->next != NULL)               return compare->next;
    return list;
 }
 
 bool isPalindromeRecursive(node_t *list)
 {
-   int count = listCount(list), start, stop;
+   int length = listCount(list), start, stop;
    node_t *p = list;
 
-   stop = count / 2 - 1;
-   if ((count % 2) == 0) start = stop + 1;
-   else                  start = stop + 2;
-
-   while (start > 0) { p = p->next; start--; }
-   if ((isPalindromeRecursiveHelper(list, p, stop, 0) == NULL))
+   if ((isPalindromeRecursiveHelper(list, length - 2) == NULL))
       return false;
    return true;
 }
@@ -102,6 +115,11 @@ int main(int argc, char *argv[])
 
    first = insert(first, 0);
    first = insert(first, 1);
+   first = insert(first, 0);
+
+   if (isPalindrome(first)) printf("It's a palindrome!\n");
+   else                     printf("It's not a palindrome.\n");
+
    if (isPalindromeRecursive(first)) printf("It's a palindrome!\n");
    else                              printf("It's not a palindrome.\n");
    return 0;
