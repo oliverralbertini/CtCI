@@ -41,8 +41,8 @@ bool isPalindrome(node_t *list)
 
    if (list == NULL) return false; // empty list
    if (list->next == NULL) return true; // one item, it's a trivial palindrome
-   /* move fast twice as fast as slow. when fast reaches the end,
-    * slow will be at the middle */
+   /* move fast twice as fast as list. when fast reaches the end,
+    * list will be at the middle */
    while (fast != NULL && fast->next != NULL) {
       bw = insert(bw, list->val);
       list = list->next;
@@ -85,16 +85,15 @@ node_t *isPalindromeRecursiveHelper(node_t *list, int length)
    node_t *compare;
 
    if (length <= 1) {
-      compare = list->next;
-      if (length == 1) compare = compare->next;
-      if (list->val == compare->val)
-         if (compare->next != NULL) return compare->next;
-         else                       return compare;
-      return NULL;
+      if (length == 1) return list->next;
+      return list;
    }
    compare = isPalindromeRecursiveHelper(list->next, length - 2);
-   if (compare == NULL || list->val != compare->val) return NULL;
-   else if (compare->next != NULL)               return compare->next;
+   if (compare == NULL || list->val != compare->val)
+      return NULL;
+   else if (compare->next != NULL)
+      return compare->next;
+   /* if it's a palindrome, make sure to not return NULL */
    return list;
 }
 
@@ -103,11 +102,16 @@ bool isPalindromeRecursive(node_t *list)
    int length = listCount(list), start, stop;
    node_t *p = list;
 
-   if ((isPalindromeRecursiveHelper(list, length - 2) == NULL))
+   if ((isPalindromeRecursiveHelper(list, length) == NULL))
       return false;
    return true;
 }
 
+void printList(node_t *list)
+{
+   while (list != NULL) { printf("%d ", list->val); list = list->next; }
+   printf("\n");
+}
 
 int main(int argc, char *argv[])
 {
@@ -115,7 +119,10 @@ int main(int argc, char *argv[])
 
    first = insert(first, 0);
    first = insert(first, 1);
+   first = insert(first, 1);
    first = insert(first, 0);
+
+   printList(first);
 
    if (isPalindrome(first)) printf("It's a palindrome!\n");
    else                     printf("It's not a palindrome.\n");
