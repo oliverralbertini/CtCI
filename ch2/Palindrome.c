@@ -100,7 +100,6 @@ node_t *isPalindromeRecursiveHelper(node_t *list, int length)
 bool isPalindromeRecursive(node_t *list)
 {
    int length = listCount(list), start, stop;
-   node_t *p = list;
 
    if ((isPalindromeRecursiveHelper(list, length) == NULL))
       return false;
