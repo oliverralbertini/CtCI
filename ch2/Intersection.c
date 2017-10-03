@@ -38,19 +38,6 @@ node_t * insert(node_t * list, int val)
    return new_node;
 }
 
-bool nodesSame(node_t *n1, node_t *n2)
-{
-   if (n1 == NULL || n2 == NULL) return false;
-   if (n1->val != n2->val) return false;
-   n1->val++;
-   if (n1->val != n2->val) {
-      n1->val--;
-      return false;
-   }
-   n1->val--;
-   return true;
-}
-
 /* if two linked lists intersect, then they share the last node, since
  * each node only has one 'next' node */
 node_t * listsIntersection(node_t * l1, node_t * l2)
@@ -60,13 +47,13 @@ node_t * listsIntersection(node_t * l1, node_t * l2)
 
    while (p1->next != NULL) { p1 = p1->next; c1++; }
    while (p2->next != NULL) { p2 = p2->next; c2++; }
-   if (!nodesSame(p1, p2)) return NULL;
+   if (p1 != p2) return NULL;
    if (c1 > c2) { Long = l1, Short = l2; diff = c1 - c2; }
    else         { Long = l2, Short = l1; diff = c2 - c1; }
    for (int i = 0; i < diff; i++)
       Long = Long->next;
    while (Long != NULL && Short != NULL) {
-      if (nodesSame(Long, Short))
+      if (Long == Short)
          return Long;
       Long = Long->next;
       Short = Short->next;
@@ -80,7 +67,7 @@ node_t * listsIntersectionRecursiveHelper(node_t * l1, node_t * l2)
 
    if (l1 == NULL) return NULL;
    intersection = listsIntersectionRecursiveHelper(l1->next, l2->next);
-   if (nodesSame(l1, l2)) return l1;
+   if (l1 == l2) return l1;
    return intersection;
 }
 
@@ -91,7 +78,7 @@ node_t * listsIntersectionRecursive(node_t * l1, node_t *l2)
 
    while (p1->next != NULL) { p1 = p1->next; c1++; }
    while (p2->next != NULL) { p2 = p2->next; c2++; }
-   if (!nodesSame(p1, p2)) return NULL;
+   if (p1 != p2) return NULL;
    if (c1 > c2) { Long = l1, Short = l2; diff = c1 - c2; }
    else         { Long = l2, Short = l1; diff = c2 - c1; }
    for (int i = 0; i < diff; i++)
@@ -101,6 +88,7 @@ node_t * listsIntersectionRecursive(node_t * l1, node_t *l2)
 
 void printList(node_t *list)
 {
+   if (list == NULL) { printf("list is null\n"); return; }
    while (list != NULL) {
       printf("%d ", list->val);
       list = list->next;
@@ -115,15 +103,17 @@ int main(int argc, char *argv[])
    first = insert(first, 7);
    first = insert(first, 6);
    first = insert(first, 5);
+   // other_list = insert(other_list, 8);
    other_list = first;
-   // other_list = insert(other_list, 88);
-   // other_list = insert(other_list, 89);
-   // first = insert(first, 4);
-   // first = insert(first, 3);
+   other_list = insert(other_list, 88);
+   other_list = insert(other_list, 89);
+   first = insert(first, 4);
+   first = insert(first, 3);
 
    printList(first);
    printList(other_list);
 
    printList(listsIntersectionRecursive(first, other_list));
+   printList(listsIntersection(first, other_list));
    return 0;
 }
