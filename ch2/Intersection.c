@@ -116,10 +116,10 @@ int main(int argc, char *argv[])
    first = insert(first, 6);
    first = insert(first, 5);
    other_list = first;
-   other_list = insert(other_list, 88);
-   other_list = insert(other_list, 89);
-   first = insert(first, 4);
-   first = insert(first, 3);
+   // other_list = insert(other_list, 88);
+   // other_list = insert(other_list, 89);
+   // first = insert(first, 4);
+   // first = insert(first, 3);
 
    printList(first);
    printList(other_list);
