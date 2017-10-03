@@ -73,6 +73,32 @@ node_t * listsIntersection(node_t * l1, node_t * l2)
    }
 }
 
+/* recursive method, will search 'from the back' */
+node_t * listsIntersectionRecursiveHelper(node_t * l1, node_t * l2)
+{
+   node_t * intersection = NULL;
+
+   if (l1 == NULL) return NULL;
+   intersection = listsIntersectionRecursiveHelper(l1->next, l2->next);
+   if (nodesSame(l1, l2)) return l1;
+   return intersection;
+}
+
+node_t * listsIntersectionRecursive(node_t * l1, node_t *l2)
+{
+   node_t * p1 = l1, * p2 = l2, * Short, * Long;
+   int c1 = 0, c2 = 0, diff;
+
+   while (p1->next != NULL) { p1 = p1->next; c1++; }
+   while (p2->next != NULL) { p2 = p2->next; c2++; }
+   if (!nodesSame(p1, p2)) return NULL;
+   if (c1 > c2) { Long = l1, Short = l2; diff = c1 - c2; }
+   else         { Long = l2, Short = l1; diff = c2 - c1; }
+   for (int i = 0; i < diff; i++)
+      Long = Long->next;
+   return listsIntersectionRecursiveHelper(Long, Short);
+}
+
 void printList(node_t *list)
 {
    while (list != NULL) {
@@ -98,6 +124,6 @@ int main(int argc, char *argv[])
    printList(first);
    printList(other_list);
 
-   printList(listsIntersection(first, other_list));
+   printList(listsIntersectionRecursive(first, other_list));
    return 0;
 }
