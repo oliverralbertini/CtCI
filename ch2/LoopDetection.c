@@ -40,31 +40,31 @@ node_t * insert(node_t * list, int val)
    return new_node;
 }
 
+/* This will find the corrupt node before the slow
+ * pointer leaves the loop of corruption */
 node_t * corruptNode(node_t * list)
 {
-   node_t * fast = list, * slow = list, * p = list;
-   int fastCount = 0, slowCount = 0;
+   node_t * fast = list, * slow = list;
 
-   do {
+   while (fast != NULL && fast->next != NULL) {
       fast = fast->next->next;
       slow = slow->next;
-      fastCount += 2;
-      slowCount += 1;
-   } while (fast != slow);
+      if (fast == slow) break;
+   }
 
-   for (int i = 0; i < (fastCount - slowCount); i++)
-      p = p->next;
+   // no corruption here
+   if (fast == NULL || fast->next == NULL) return NULL;
 
-   while (p != list) {
-      p = p->next;
+   while (list != slow) {
+      slow = slow->next;
       list = list->next;
    }
-   return p;
+   return slow;
 }
 
 int main(int argc, char *argv[])
 {
-   node_t * first = NULL, * hold = NULL;
+   node_t * first = NULL, * hold = NULL, * corrupt = NULL;
 
    first = insert(first, 10);
    hold = first;
@@ -79,6 +79,9 @@ int main(int argc, char *argv[])
    first = insert(first, 2);
    first = insert(first, 1);
 
-   printf("%d ", corruptNode(first)->val);
+   if ((corrupt = corruptNode(first)) == NULL)
+      printf("No corruption here.\n");
+   else
+      printf("%d ", corruptNode(first)->val);
    return 0;
 }
