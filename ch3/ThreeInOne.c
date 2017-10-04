@@ -91,7 +91,7 @@ bool isEmpty(multiStack_t * ms, int stack)
 int peek(multiStack_t * ms, int stack)
 {
    if (ms->lengths[stack] == 0) printf("Stack # %d is empty.\n", stack + 1);
-   return ms->data[lengthThroughHere(ms, stack)];
+   return ms->data[lengthThroughHere(ms, stack) - 1];
 }
 
 void printMultiStack(multiStack_t * ms)
@@ -118,7 +118,7 @@ int main(int argc, char *argv[])
    push(ms, 2, 4);
    push(ms, 2, 5);
    printMultiStack(ms);
-   printf("%d\n", pop(ms, 1));
+   printf("%d\n", peek(ms, 2));
    printMultiStack(ms);
    return 0;
 }
